@@ -48,6 +48,7 @@
   <!-- ============ OVERTURE: the monogram draws itself, then we fly through the E ============ -->
   <div class="curtain" data-curtain aria-hidden="true">
     <div class="curtain__veil"></div>
+    <div class="curtain__stripes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="curtain__stage">
       <span class="curtain__mark metal-mask mask-mark"></span>
       <span class="curtain__word metal-mask mask-word"></span>
@@ -57,6 +58,7 @@
   </div>
 
   <!-- pointer follower (fine pointers only) -->
+  <canvas class="trail" aria-hidden="true"></canvas>
   <div class="cursor" aria-hidden="true"><span class="cursor__ring"></span><span class="cursor__dot"></span></div>
 
   <!-- ============ NAV ============ -->
@@ -108,6 +110,7 @@
     <!-- ============ HERO ============ -->
     <section class="hero" id="top" aria-labelledby="hero-title" data-theme="navy">
       <canvas class="dust" aria-hidden="true"></canvas>
+      <canvas class="stars-gl" aria-hidden="true"></canvas>
       <div class="hero__mono" aria-hidden="true"><span class="mask-star-outline"></span></div>
       <div class="hero__light" aria-hidden="true"></div>
 
@@ -166,6 +169,11 @@
     </section>
 
     <!-- ============ II. CHALLENGE (problems struck through in gold) ============ -->
+    <div class="ticker" data-theme="navy" aria-hidden="true">
+      <div class="ticker__row ticker__row--a"><div class="ticker__track"><span>SDVOSB</span><i></i><span>CAGE 9KV33</span><i></i><span>UEI ZVQVJUVMF9K6</span><i></i><span>Our mission is your success</span><i></i><span>SDVOSB</span><i></i><span>CAGE 9KV33</span><i></i><span>UEI ZVQVJUVMF9K6</span><i></i><span>Our mission is your success</span><i></i><span>SDVOSB</span><i></i><span>CAGE 9KV33</span><i></i><span>UEI ZVQVJUVMF9K6</span><i></i><span>Our mission is your success</span><i></i></div></div>
+      <div class="ticker__row ticker__row--b"><div class="ticker__track"><span>SDVOSB</span><i></i><span>CAGE 9KV33</span><i></i><span>UEI ZVQVJUVMF9K6</span><i></i><span>Our mission is your success</span><i></i><span>SDVOSB</span><i></i><span>CAGE 9KV33</span><i></i><span>UEI ZVQVJUVMF9K6</span><i></i><span>Our mission is your success</span><i></i><span>SDVOSB</span><i></i><span>CAGE 9KV33</span><i></i><span>UEI ZVQVJUVMF9K6</span><i></i><span>Our mission is your success</span><i></i></div></div>
+    </div>
+
     <section class="challenge" aria-labelledby="challenge-title" data-theme="navy">
       <div class="wrap">
         <p class="chapter"><span class="chapter__n">II</span>The challenge</p>
@@ -180,7 +188,7 @@
     </section>
 
     <!-- ============ III. SERVICES (three doors open in 3D) ============ -->
-    <section class="services" id="services" aria-labelledby="services-title" data-theme="light">
+    <section class="services" id="services" aria-labelledby="services-title" data-theme="light" data-stripes>
       <div class="services__pin">
         <div class="wrap services__head">
           <p class="chapter"><span class="chapter__n">III</span>Services</p>
@@ -246,6 +254,7 @@
           <h2 class="h-display" id="cap-title" data-rise-words>Thirteen ways we <em class="accent">keep missions running.</em></h2>
         </div>
         <div class="drum" data-drum>
+          <span class="drum__ghost" aria-hidden="true" data-drum-ghost>01</span>
           <div class="drum__window" aria-hidden="true"></div>
           <ol class="drum__list">
             <li class="drum__item" data-cat="Facilities">Therapy Pool Maintenance</li>
@@ -304,6 +313,7 @@
             <span class="cert__sheen" aria-hidden="true"></span>
             <span class="cert__ribbon" aria-hidden="true"></span>
             <div class="cert__seal" aria-hidden="true">
+              <span class="cert__shock"></span>
               <svg viewBox="0 0 200 200"><defs><path id="seal-ring" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0"/></defs><text><textPath href="#seal-ring">SERVICE-DISABLED VETERAN-OWNED · WOMAN-OWNED · SMALL BUSINESS · </textPath></text></svg>
               <span class="cert__mono metal-mask mask-mark"></span>
             </div>
@@ -322,7 +332,7 @@
     </section>
 
     <!-- ============ VII. CONTACT ============ -->
-    <section class="contact" id="contact" aria-labelledby="contact-title" data-theme="light">
+    <section class="contact" id="contact" aria-labelledby="contact-title" data-theme="light" data-stripes>
       <div class="contact__mono" aria-hidden="true"><span class="mask-star-outline"></span></div>
       <div class="wrap contact__inner">
         <p class="chapter"><span class="chapter__n">VII</span>Have a need?</p>

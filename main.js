@@ -17,6 +17,7 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const rand = (a, b) => a + Math.random() * (b - a);
 const isDesktop = () => matchMedia("(min-width: 901px)").matches;
+const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 
 const nav = $("[data-nav]");
 const navHeight = () => nav.offsetHeight;
@@ -166,8 +167,16 @@ function initOverture() {
       .to(tag, { opacity: 1, scaleX: 1, duration: 1.2, ease: "expo.out" }, 1.45)
       .to([word, tag], { opacity: 0, y: -14, duration: 0.6, ease: "power3.in" }, 2.75);
   }
-  // II. the gold lifts off; the monogram becomes a window
-  const hole = SEEN ? draw + 0.05 : 3.15;
+  // the stripe storm: 13 bars shoot across from alternating sides, then clear the stage
+  const stripes = $$(".curtain__stripes i", curtain);
+  const ss = SEEN ? draw - 0.15 : 2.6;
+  stripes.forEach((st, i) => gsap.set(st, { scaleX: 0, transformOrigin: i % 2 ? "100% 50%" : "0% 50%" }));
+  tl.to(stripes, { scaleX: 1, duration: 0.5, ease: "power4.inOut", stagger: 0.03 }, ss)
+    .add(() => stripes.forEach((st, i) => { st.style.transformOrigin = i % 2 ? "0% 50%" : "100% 50%"; }), ss + 0.9)
+    .to(stripes, { scaleX: 0, duration: 0.55, ease: "power4.inOut", stagger: { each: 0.03, from: "center" } }, ss + 0.95);
+
+  // II. the ink lifts off; the monogram becomes a window
+  const hole = SEEN ? draw + 0.75 : 3.7;
   tl.add(() => curtain.classList.add("is-hole"), hole)
     .to(mark, { opacity: 0, duration: 0.45, ease: "power2.out" }, hole)
   // III. fly through the stem of the E
@@ -202,6 +211,23 @@ function initHero(chars) {
   const hero = $(".hero");
   const light = $(".hero__light");
   initDust($(".dust", hero), hero);
+
+  // the fifty stars: galaxy, then the flag canton, then a warp. Loaded while the overture plays.
+  let stars = null;
+  const startStars = () => import("./stars-gl.js")
+    .then(({ createStars }) => { stars = createStars($(".stars-gl", hero)); if (stars) $(".dust", hero).classList.add("is-off"); })
+    .catch((err) => console.warn("Star field unavailable; keeping the 2D dust.", err));
+  if ("requestIdleCallback" in window) requestIdleCallback(startStars, { timeout: 1500 }); else setTimeout(startStars, 800);
+  ScrollTrigger.create({
+    trigger: hero, start: "top top", end: "bottom top",
+    onUpdate: (self) => { if (!stars) return; stars.state.morph = smooth(0.03, 0.4, self.progress); stars.state.warp = smooth(0.45, 1, self.progress); },
+  });
+  if (FINE_POINTER) {
+    window.addEventListener("pointermove", (e) => {
+      if (!stars) return;
+      gsap.to(stars.state, { tiltX: (e.clientX / innerWidth - 0.5) * 2, tiltY: (e.clientY / innerHeight - 0.5) * 2, duration: 1.4, ease: "power3.out", overwrite: true });
+    }, { passive: true });
+  }
   const pos = { x: 50, y: 42 };
   const apply = () => { light.style.setProperty("--mx", `${pos.x}%`); light.style.setProperty("--my", `${pos.y}%`); };
   const xTo = gsap.quickTo(pos, "x", { duration: 1.2, ease: "power3.out", onUpdate: apply });
@@ -222,8 +248,10 @@ function initHero(chars) {
   }
 
   // scroll away: the letters come loose and drift, the monogram swells
-  gsap.fromTo(chars, { x: 0, y: 0, rotation: 0, opacity: 1 }, {
-    x: () => rand(-320, 320), y: () => rand(-520, -120), rotation: () => rand(-80, 80), opacity: 0, ease: "power2.in",
+  // scroll away: the headline detonates in 3D
+  gsap.set(chars, { transformPerspective: 700 });
+  gsap.fromTo(chars, { x: 0, y: 0, z: 0, rotation: 0, rotationY: 0, opacity: 1 }, {
+    x: () => rand(-460, 460), y: () => rand(-640, -60), z: () => rand(-900, 520), rotation: () => rand(-140, 140), rotationY: () => rand(-220, 220), opacity: 0, ease: "power2.in",
     immediateRender: false,
     scrollTrigger: { trigger: hero, start: "top top", end: "bottom 15%", scrub: 0.8, invalidateOnRefresh: true },
   });
@@ -245,10 +273,21 @@ function initMission() {
   const words = split($("[data-ignite]"), "ignite");
   if (!MOTION) return;
 
-  gsap.fromTo(section, { clipPath: "circle(0% at 50% 50%)" }, {
-    clipPath: "circle(75% at 50% 50%)", ease: "none",
-    scrollTrigger: { trigger: section, start: "top bottom", end: "top 10%", scrub: 0.6 },
-  });
+  const starClip = (w, h, R, turn) => {
+    const cx = w / 2, cy = h / 2, pts = [];
+    for (let i = 0; i < 10; i++) {
+      const a = -Math.PI / 2 + turn + (i * Math.PI) / 5;
+      const r = i % 2 ? R * 0.382 : R;
+      pts.push((cx + Math.cos(a) * r).toFixed(1) + "px " + (cy + Math.sin(a) * r).toFixed(1) + "px");
+    }
+    return "polygon(" + pts.join(",") + ")";
+  };
+  const iris = (p) => {
+    const w = section.offsetWidth, h = Math.min(section.offsetHeight, innerHeight * 1.3);
+    section.style.clipPath = p >= 0.999 ? "none" : starClip(w, h, Math.hypot(w, h) * 1.45 * Math.pow(p, 1.5), p * Math.PI * 0.8);
+  };
+  iris(0);
+  ScrollTrigger.create({ trigger: section, start: "top bottom", end: "top 5%", scrub: 0.6, onUpdate: (self) => iris(self.progress), onRefresh: (self) => iris(self.progress) });
   gsap.to(words, {
     opacity: 1, ease: "none", stagger: 0.08,
     scrollTrigger: { trigger: "[data-ignite]", start: "top 75%", end: "bottom 50%", scrub: 0.5 },
@@ -274,6 +313,7 @@ function initDust(canvas, section) {
   new ResizeObserver(resize).observe(canvas);
 
   const tick = () => {
+    if (canvas.classList.contains("is-off")) return;
     const v = lenis ? clamp(lenis.velocity, -40, 40) : 0;
     ctx.clearRect(0, 0, w, h);
     for (const m of motes) {
@@ -301,6 +341,8 @@ function initDust(canvas, section) {
 function initChallenge() {
   const strikes = $$(".strike");
   if (!MOTION) { strikes.forEach((s) => s.classList.add("is-struck")); return; }
+  const section = $(".challenge");
+  const hit = new Set();
   ScrollTrigger.create({
     trigger: "[data-strikes]", start: "top 65%", end: "bottom 30%", scrub: 0.4,
     onUpdate: (self) => {
@@ -308,6 +350,14 @@ function initChallenge() {
         const p = clamp(self.progress * strikes.length - i, 0, 1);
         s.style.setProperty("--s", p.toFixed(3));
         s.classList.toggle("is-struck", p > 0.6);
+        if (p > 0.97 && !hit.has(i)) {
+          hit.add(i);
+          gsap.fromTo(section, { "--flash": 0.6 }, { "--flash": 0, duration: 0.9, ease: "power2.out", overwrite: true });
+          gsap.fromTo(s, { rotation: 0, y: 0 }, { rotation: rand(-8, 8), y: "0.14em", duration: 1, ease: "bounce.out" });
+        } else if (p < 0.5 && hit.has(i)) {
+          hit.delete(i);
+          gsap.to(s, { rotation: 0, y: 0, duration: 0.4, ease: "power2.out" });
+        }
       });
     },
   });
@@ -374,9 +424,11 @@ function initDoors() {
   const mm = gsap.matchMedia();
   mm.add("(min-width: 901px)", () => {
     gsap.set(doors, { rotationY: -100, z: -120, opacity: 0, transformOrigin: "0% 50%" });
+    gsap.set(".doors", { rotationY: -28, rotationX: 10, z: -420, transformPerspective: 1600 });
     const tl = gsap.timeline({
       scrollTrigger: { trigger: ".services__pin", start: "top top", end: "+=140%", pin: true, scrub: 0.8, anticipatePin: 1 },
     });
+    tl.to(".doors", { rotationY: 0, rotationX: 0, z: 0, duration: 1.4, ease: "power3.out" }, 0);
     doors.forEach((d, i) => {
       tl.to(d, { rotationY: 0, z: 0, opacity: 1, duration: 1, ease: "power3.out" }, i * 0.55);
       tl.from($$(".door__title, .door__text, .door__list", d), { x: 40, opacity: 0, duration: 0.6, stagger: 0.08 }, i * 0.55 + 0.45);
@@ -384,6 +436,20 @@ function initDoors() {
     tl.add(countUp, 1.3);
     tl.to({}, { duration: 0.4 });
   });
+  if (FINE_POINTER) {
+    doors.forEach((d) => {
+      const face = $(".door__face", d);
+      gsap.set(face, { transformPerspective: 900 });
+      const rx = gsap.quickTo(face, "rotationX", { duration: 0.6, ease: "power3.out" });
+      const ry = gsap.quickTo(face, "rotationY", { duration: 0.6, ease: "power3.out" });
+      face.addEventListener("pointermove", (e) => {
+        const r = face.getBoundingClientRect();
+        ry(((e.clientX - r.left) / r.width - 0.5) * 16);
+        rx(-((e.clientY - r.top) / r.height - 0.5) * 12);
+      });
+      face.addEventListener("pointerleave", () => { rx(0); ry(0); });
+    });
+  }
   mm.add("(max-width: 900px)", () => {
     doors.forEach((d) => {
       gsap.from(d, { rotationX: -35, y: 80, opacity: 0, transformOrigin: "50% 0%", duration: 1.4, ease: "expo.out", scrollTrigger: { trigger: d, start: "top 88%", once: true, onEnter: () => { if (d.contains(count)) countUp(); } } });
@@ -408,6 +474,20 @@ function initDrum() {
   source.classList.add("sr-only");
   source.after(list);
   const items = $$(".drum__item", list);
+  const ghost = $("[data-drum-ghost]", drum);
+  gsap.set(drum, { transformPerspective: 1400 });
+  const tiltY = gsap.quickTo(drum, "rotationY", { duration: 0.9, ease: "power3.out" });
+  const tiltX = gsap.quickTo(drum, "rotationX", { duration: 0.9, ease: "power3.out" });
+  const skew = gsap.quickTo(drum, "skewX", { duration: 0.5, ease: "power3.out" });
+  if (FINE_POINTER) {
+    drum.addEventListener("pointermove", (e) => {
+      const r = drum.getBoundingClientRect();
+      tiltY(((e.clientX - r.left) / r.width - 0.5) * 18);
+      tiltX(-((e.clientY - r.top) / r.height - 0.5) * 10);
+    });
+    drum.addEventListener("pointerleave", () => { tiltY(0); tiltX(0); });
+  }
+  gsap.ticker.add(() => { if (lenis) skew(clamp(lenis.velocity * -0.35, -12, 12)); });
 
   const n = items.length;
   const step = 360 / n;
@@ -432,7 +512,12 @@ function initDrum() {
       if (ad < bestD) { bestD = ad; best = i; }
     });
     items.forEach((it, i) => it.classList.toggle("is-active", i === best));
-    idx.textContent = String(best + 1).padStart(2, "0");
+    const label = String(best + 1).padStart(2, "0");
+    if (idx.textContent !== label) {
+      idx.textContent = label;
+      ghost.textContent = label;
+      gsap.fromTo(ghost, { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "expo.out", overwrite: true });
+    }
     cat.textContent = items[best].dataset.cat;
   };
   layout();
@@ -454,6 +539,16 @@ function initCert() {
   if (!MOTION) return;
   gsap.from(inner, { rotationX: 38, y: 120, opacity: 0, duration: 1.8, ease: "expo.out", scrollTrigger: { trigger: cert, start: "top 85%", once: true } });
   gsap.from($$(".spec__row", cert), { opacity: 0, y: 24, duration: 1, ease: "expo.out", stagger: 0.08, delay: 0.4, scrollTrigger: { trigger: cert, start: "top 80%", once: true } });
+  const seal = $(".cert__seal", cert);
+  const shock = $(".cert__shock", cert);
+  gsap.set(seal, { scale: 3.4, rotation: -60, opacity: 0 });
+  ScrollTrigger.create({
+    trigger: cert, start: "top 65%", once: true,
+    onEnter: () => gsap.timeline({ delay: 0.7 })
+      .to(seal, { scale: 1, rotation: 0, opacity: 1, duration: 0.42, ease: "power4.in" })
+      .fromTo(shock, { scale: 0.7, opacity: 0.95 }, { scale: 3.4, opacity: 0, duration: 1, ease: "expo.out" })
+      .fromTo(cert, { y: 14 }, { y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" }, "<"),
+  });
   if (!FINE_POINTER) return;
   cert.addEventListener("pointermove", (e) => {
     const r = inner.getBoundingClientRect();
@@ -643,6 +738,105 @@ function initPointer() {
 }
 
 /* =========================================================
+   Codes ticker: two giant bands, speed and lean follow the scroll
+   ========================================================= */
+function initTicker() {
+  if (!MOTION || !$(".ticker")) return;
+  const rows = $$(".ticker__track").map((el, i) => ({ el, dir: i % 2 ? 1 : -1, x: 0, w: el.scrollWidth / 3 }));
+  addEventListener("resize", () => rows.forEach((r) => { r.w = r.el.scrollWidth / 3; }));
+  const lean = gsap.quickTo(".ticker", "skewY", { duration: 0.5, ease: "power3.out" });
+  let boost = 0;
+  const tick = (_, dt) => {
+    const v = lenis ? lenis.velocity : 0;
+    boost += (Math.abs(v) * 0.9 - boost) * 0.1;
+    rows.forEach((r) => {
+      r.x = gsap.utils.wrap(-r.w, 0, r.x + (1.3 + boost) * (dt / 16.67) * r.dir);
+      r.el.style.transform = "translate3d(" + r.x + "px, 0, 0)";
+    });
+    lean(clamp(v * 0.22, -7, 7));
+  };
+  ScrollTrigger.create({ trigger: ".ticker", start: "top bottom", end: "bottom top", onToggle: (st) => (st.isActive ? gsap.ticker.add(tick) : gsap.ticker.remove(tick)) });
+}
+
+/* =========================================================
+   Big headings lean into fast scrolling
+   ========================================================= */
+function initVelocitySkew() {
+  if (!MOTION || !lenis) return;
+  const els = $$(".h-display, .challenge__title, .contact__title");
+  const lean = gsap.quickTo(els, "skewY", { duration: 0.6, ease: "power3.out" });
+  gsap.ticker.add(() => lean(clamp(lenis.velocity * 0.12, -5, 5)));
+}
+
+/* =========================================================
+   Stripe wipes: red and navy bars sweep away to reveal a section
+   ========================================================= */
+function initStripes() {
+  if (!MOTION) return;
+  $$("[data-stripes]").forEach((section) => {
+    const overlay = document.createElement("div");
+    overlay.className = "stripes";
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.innerHTML = "<i></i>".repeat(13);
+    section.prepend(overlay);
+    const bars = $$("i", overlay);
+    bars.forEach((b, i) => gsap.set(b, { transformOrigin: i % 2 ? "100% 50%" : "0% 50%" }));
+    gsap.to(bars, {
+      scaleX: 0, ease: "power2.inOut", stagger: { each: 0.06, from: "edges" },
+      scrollTrigger: { trigger: section, start: "top 95%", end: "top 20%", scrub: 0.5 },
+    });
+  });
+}
+
+/* =========================================================
+   Cursor trail: red, white and blue stars that drift and fade
+   ========================================================= */
+function initTrail() {
+  if (!MOTION || !FINE_POINTER) return;
+  const canvas = $(".trail");
+  const ctx = canvas.getContext("2d");
+  const COLORS = ["#e04a5f", "#3d6bc4", "#c9d2de", "#b31942"];
+  let w = 0, h = 0, dpr = 1, parts = [], running = false, lx = 0, ly = 0;
+  const resize = () => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    w = innerWidth; h = innerHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  resize();
+  addEventListener("resize", resize);
+  const star = (x, y, r, rot) => {
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const a = rot + (i * Math.PI) / 5 - Math.PI / 2;
+      const rr = i % 2 ? r * 0.42 : r;
+      ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+    }
+    ctx.closePath();
+    ctx.fill();
+  };
+  const tick = () => {
+    ctx.clearRect(0, 0, w, h);
+    parts = parts.filter((p) => (p.life -= 0.022) > 0);
+    for (const p of parts) {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.04; p.rot += p.spin;
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.c;
+      star(p.x, p.y, p.r * (0.4 + p.life * 0.6), p.rot);
+    }
+    ctx.globalAlpha = 1;
+    if (!parts.length) { gsap.ticker.remove(tick); running = false; }
+  };
+  addEventListener("pointermove", (e) => {
+    if (Math.hypot(e.clientX - lx, e.clientY - ly) < 8) return;
+    lx = e.clientX; ly = e.clientY;
+    if (parts.length > 90) parts.shift();
+    parts.push({ x: lx, y: ly, vx: rand(-0.8, 0.8), vy: rand(-1.2, 0.2), r: rand(3, 7), rot: rand(0, 6.28), spin: rand(-0.12, 0.12), life: 1, c: COLORS[(Math.random() * COLORS.length) | 0] });
+    if (!running) { running = true; gsap.ticker.add(tick); }
+  }, { passive: true });
+}
+
+/* =========================================================
    Boot
    ========================================================= */
 function boot() {
@@ -659,6 +853,10 @@ function boot() {
   initNav();
   initCopy();
   initPointer();
+  initTicker();
+  initVelocitySkew();
+  initStripes();
+  initTrail();
   $$("[data-year]").forEach((el) => { el.textContent = new Date().getFullYear(); });
   const kern = () => { restoreKerning($(".hero__title")); restoreKerning($(".contact__title")); };
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(kern);

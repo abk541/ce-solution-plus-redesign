@@ -77,7 +77,7 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 body {
-  background: var(--paper); color: var(--navy);
+  background: var(--navy); color: var(--navy); /* navy behind everything: the star iris bursts white out of it */
   font-family: var(--sans); font-size: 17px; font-weight: 400; line-height: 1.6;
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: clip;
 }
@@ -681,4 +681,67 @@ html.js:not(.reduced) [data-rows].is-in .agency { clip-path: inset(0 0 0 0); tra
    ========================================================= */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 120ms !important; transition-delay: 0ms !important; scroll-behavior: auto !important; }
+}
+
+/* =========================================================
+   Round two: louder motion
+   ========================================================= */
+
+/* overture stripe storm (flag stripes on the white veil, under the monogram) */
+.curtain__stripes { position: absolute; inset: 0; display: grid; grid-template-rows: repeat(13, 1fr); pointer-events: none; }
+.curtain__stripes i { display: block; transform: scaleX(0); }
+.curtain__stripes i:nth-child(odd) { background: var(--red); }
+.curtain__stripes i:nth-child(even) { background: var(--white); }
+
+/* fifty stars (WebGL) over the 2D dust fallback */
+.stars-gl { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 1.4s var(--out-expo); }
+.stars-gl.is-ready { opacity: 1; }
+.hero .dust.is-off { display: none; }
+
+/* codes ticker */
+.ticker { position: relative; overflow: hidden; padding: clamp(40px, 6vw, 96px) 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); transform-origin: 50% 50%; }
+.ticker__row { overflow: hidden; white-space: nowrap; }
+.ticker__track { display: inline-flex; align-items: center; will-change: transform; }
+.ticker__track span {
+  font-family: var(--display); font-weight: 800; text-transform: uppercase; line-height: 1;
+  font-size: clamp(56px, 9vw, 160px); padding: 0 0.28em; letter-spacing: 0.01em;
+}
+.ticker__row--b .ticker__track span { color: transparent; -webkit-text-stroke: 1.5px var(--steel); }
+.ticker__track i {
+  width: 0.5em; height: 0.5em; font-size: clamp(56px, 9vw, 160px); flex: 0 0 auto; background: var(--red-hi);
+  clip-path: polygon(50% 0, 61.8% 38.2%, 100% 38.2%, 69% 61.8%, 80.9% 100%, 50% 76.4%, 19.1% 100%, 31% 61.8%, 0 38.2%, 38.2% 38.2%);
+}
+html.reduced .ticker, html.no-js .ticker { display: none; }
+
+/* challenge: red flash on every strike, struck words tumble */
+.challenge { position: relative; isolation: isolate; }
+.challenge::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: var(--flash, 0);
+  background: radial-gradient(80% 70% at 30% 50%, rgba(224, 74, 95, 0.55), rgba(179, 25, 66, 0.15) 60%, transparent 80%);
+}
+.strike { display: inline-block; }
+
+/* drum ghost counter */
+.drum__ghost {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 0; pointer-events: none;
+  font-family: var(--display); font-weight: 800; line-height: 0.8; font-size: clamp(220px, 34vw, 560px);
+  color: transparent; -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.07);
+}
+.drum__list, .drum__window, .drum__meta { z-index: 1; }
+
+/* seal stamp shockwave */
+.cert__shock { position: absolute; inset: -4px; border-radius: 50%; border: 3px solid var(--red-hi); opacity: 0; pointer-events: none; }
+
+/* stripe wipes revealing sections */
+.stripes { position: absolute; left: 0; right: 0; top: 0; height: 100vh; z-index: 6; display: grid; grid-template-rows: repeat(13, 1fr); pointer-events: none; }
+.stripes i:nth-child(odd) { background: var(--red); }
+.stripes i:nth-child(even) { background: var(--navy); }
+
+/* cursor star trail */
+.trail { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 140; pointer-events: none; display: none; }
+@media (hover: hover) and (pointer: fine) { html.js:not(.reduced) .trail { display: block; } }
+
+@media (max-width: 900px) {
+  .ticker__track span, .ticker__track i { font-size: clamp(44px, 16vw, 90px); }
+  .stars-gl.is-ready { opacity: 0.55; } /* phones: keep the galaxy behind the text, not on top of it */
 }
