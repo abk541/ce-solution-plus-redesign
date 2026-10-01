@@ -1,276 +1,383 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CE Solution Plus — Our Mission Is Your Success</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>CE Solution Plus | Our Mission Is Your Success</title>
   <meta name="description" content="CE Solution Plus is a veteran- and woman-owned small business delivering staffing, facility operations & maintenance, and training services to federal agencies." />
-  <meta name="theme-color" content="#07080a" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#0a1628" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="CE Solution Plus | Our Mission Is Your Success" />
+  <meta property="og:description" content="Veteran- and woman-owned small business delivering staffing, facility operations & maintenance, and training services to federal agencies." />
+  <link rel="icon" type="image/png" href="assets/logo-mark.png" />
+  <script>
+    // Progressive enhancement: hidden start states only apply once JS is known to run.
+    document.documentElement.classList.replace("no-js", "js");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("reduced");
+    try { if (sessionStorage.getItem("ce-seen")) document.documentElement.classList.add("seen"); } catch (e) {}
+  </script>
+  <link rel="preload" href="fonts/barlow-condensed-800.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/logo-mark.png" as="image" />
   <link rel="stylesheet" href="styles.css" />
-  <script type="importmap">
-    { "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-    } }
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "CE Solution Plus Corp.",
+      "slogan": "Our mission is your success.",
+      "logo": "assets/logo-original.png",
+      "email": "siblini@cesolutionplus.com",
+      "telephone": "+1-718-587-9987",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "3007 43rd Street, Suite 1",
+        "addressLocality": "Astoria",
+        "addressRegion": "NY",
+        "postalCode": "11103",
+        "addressCountry": "US"
+      }
+    }
   </script>
 </head>
-<body class="is-loading">
+<body>
 
-  <!-- Loader -->
-  <div class="loader" aria-hidden="true">
-    <div class="loader__count"><span class="loader__num">0</span><span class="loader__pct">%</span></div>
-    <div class="loader__bar"><span></span></div>
-    <div class="loader__label">CE Solution Plus — Mission Ready</div>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ============ OVERTURE: the monogram draws itself, then we fly through the E ============ -->
+  <div class="curtain" data-curtain aria-hidden="true">
+    <div class="curtain__veil"></div>
+    <div class="curtain__stage">
+      <span class="curtain__mark metal-mask mask-mark"></span>
+      <span class="curtain__word metal-mask mask-word"></span>
+      <span class="curtain__tag metal-mask mask-tag"></span>
+    </div>
+    <p class="curtain__skip">Scroll or press any key to skip</p>
   </div>
 
-  <!-- Cursor -->
-  <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><em>View</em></span></div>
+  <!-- pointer follower (fine pointers only) -->
+  <div class="cursor" aria-hidden="true"><span class="cursor__ring"></span><span class="cursor__dot"></span></div>
 
-  <!-- WebGL -->
-  <canvas class="gl" aria-hidden="true"></canvas>
-  <div class="grain" aria-hidden="true"></div>
-
-  <!-- Nav -->
-  <header class="nav">
-    <a href="#top" class="brand" data-magnetic aria-label="CE Solution Plus home">
-      <span class="brand__mark" aria-hidden="true"><i></i><i></i></span>
-      <span class="brand__text">CE Solution<b>Plus</b></span>
+  <!-- ============ NAV ============ -->
+  <header class="nav" data-nav>
+    <span class="nav__progress" aria-hidden="true"></span>
+    <a href="#top" class="brand">
+      <span class="brand__mark mask-mark" aria-hidden="true"></span>
+      <span class="brand__word mask-word" aria-hidden="true"></span>
+      <span class="sr-only">CE Solution Plus, home</span>
     </a>
+
     <nav class="nav__links" aria-label="Primary">
-      <a href="#services" data-magnetic><span data-hover="Services">Services</span></a>
-      <a href="#capabilities" data-magnetic><span data-hover="Capabilities">Capabilities</span></a>
-      <a href="#agencies" data-magnetic><span data-hover="Agencies">Agencies</span></a>
-      <a href="#credentials" data-magnetic><span data-hover="Credentials">Credentials</span></a>
+      <a href="#services" data-link="services">Services</a>
+      <a href="#capabilities" data-link="capabilities">Capabilities</a>
+      <a href="#agencies" data-link="agencies">Agencies</a>
+      <a href="#credentials" data-link="credentials">Credentials</a>
     </nav>
-    <a href="#contact" class="btn btn--sm nav__cta" data-magnetic><span>Get in touch</span></a>
-    <button class="burger" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
+
+    <a href="#contact" class="btn btn--sm nav__cta" data-magnetic>
+      <span class="btn__fill" aria-hidden="true"></span>
+      <span class="btn__label">Start a conversation</span>
+    </a>
+
+    <button class="burger" type="button" aria-controls="menu" aria-expanded="false">
+      <span class="sr-only">Menu</span>
+      <span class="burger__icon" aria-hidden="true"><i></i><i></i></span>
+    </button>
   </header>
 
-  <div class="menu" aria-hidden="true">
-    <ul>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#capabilities">Capabilities</a></li>
-      <li><a href="#agencies">Agencies</a></li>
-      <li><a href="#credentials">Credentials</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <p class="menu__foot">(718) 587-9987 · Astoria, NY</p>
+  <div class="menu" id="menu" data-theme="navy" inert>
+    <span class="menu__mono mask-mark" aria-hidden="true"></span>
+    <nav aria-label="Mobile">
+      <ol class="menu__list">
+        <li><a href="#services"><span class="menu__i" aria-hidden="true">III</span><span class="menu__t">Services</span></a></li>
+        <li><a href="#capabilities"><span class="menu__i" aria-hidden="true">IV</span><span class="menu__t">Capabilities</span></a></li>
+        <li><a href="#agencies"><span class="menu__i" aria-hidden="true">V</span><span class="menu__t">Agencies</span></a></li>
+        <li><a href="#credentials"><span class="menu__i" aria-hidden="true">VI</span><span class="menu__t">Credentials</span></a></li>
+        <li><a href="#contact"><span class="menu__i" aria-hidden="true">VII</span><span class="menu__t">Contact</span></a></li>
+      </ol>
+    </nav>
+    <div class="menu__foot">
+      <a href="tel:+17185879987">(718) 587-9987</a>
+      <a href="mailto:siblini@cesolutionplus.com">siblini@cesolutionplus.com</a>
+    </div>
   </div>
 
-  <main id="top">
+  <main id="main" tabindex="-1">
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero__eyebrow reveal-fade">
-        <span class="dot"></span> Veteran &amp; Woman-Owned Small Business
-      </div>
-      <h1 class="hero__title">
-        <span class="line"><span class="split">You have a need.</span></span>
-        <span class="line line--accent"><span class="split">We have a solution.</span></span>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top" aria-labelledby="hero-title" data-theme="navy">
+      <canvas class="dust" aria-hidden="true"></canvas>
+      <div class="hero__mono" aria-hidden="true"><span class="mask-star-outline"></span></div>
+      <div class="hero__light" aria-hidden="true"></div>
+
+      <p class="eyebrow hero__eyebrow" data-hero-fade>
+        <span>Veteran &amp; woman-owned</span><i aria-hidden="true"></i><span>Federal services</span><i aria-hidden="true"></i><span>Astoria, New York</span>
+      </p>
+
+      <h1 class="hero__title" id="hero-title" data-chars>
+        <span class="hero__line">You have a need.</span>
+        <span class="hero__line hero__line--b">We have a <em class="accent">solution.</em></span>
       </h1>
+
       <div class="hero__foot">
-        <p class="hero__sub reveal-fade">Staffing, facility operations &amp; training for the federal agencies that serve America — delivered worry‑free, so you can focus on your mission.</p>
-        <div class="hero__scroll reveal-fade" aria-hidden="true">
-          <span>Scroll</span><i></i>
+        <p class="hero__lead" data-hero-fade>Staffing, facility operations &amp; maintenance, and training for the federal agencies that serve America. Delivered worry&#8209;free, so you can focus on your mission.</p>
+
+        <div class="hero__actions" data-hero-fade>
+          <a href="#contact" class="btn" data-magnetic>
+            <span class="btn__fill" aria-hidden="true"></span>
+            <span class="btn__label">Start a conversation</span>
+            <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#services" class="link-line">Explore our services</a>
+        </div>
+
+        <dl class="codes" data-hero-fade aria-label="Contracting codes">
+          <div class="codes__item">
+            <dt>SAM UEI</dt>
+            <dd><span>ZVQVJUVMF9K6</span>
+              <button class="copy" type="button" data-copy="ZVQVJUVMF9K6" data-copy-label="SAM UEI"><span class="sr-only">Copy SAM UEI</span><svg viewBox="0 0 16 16" aria-hidden="true"><path class="copy__a" d="M5 5V2.5h8.5V11H11M2.5 5H11v8.5H2.5z"/><path class="copy__b" d="M3 8.5l3.2 3L13 4.5"/></svg></button>
+            </dd>
+          </div>
+          <div class="codes__item">
+            <dt>CAGE</dt>
+            <dd><span>9KV33</span>
+              <button class="copy" type="button" data-copy="9KV33" data-copy-label="CAGE code"><span class="sr-only">Copy CAGE code</span><svg viewBox="0 0 16 16" aria-hidden="true"><path class="copy__a" d="M5 5V2.5h8.5V11H11M2.5 5H11v8.5H2.5z"/><path class="copy__b" d="M3 8.5l3.2 3L13 4.5"/></svg></button>
+            </dd>
+          </div>
+          <div class="codes__item">
+            <dt>Set-asides</dt>
+            <dd><span>SDVOSB · WOSB</span></dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="scrollcue" aria-hidden="true"><span>Scroll</span><i></i></div>
+    </section>
+
+    <!-- ============ I. MISSION (iris into night) ============ -->
+    <section class="mission" aria-labelledby="mission-label" data-theme="light" data-iris>
+      <div class="wrap mission__inner">
+        <p class="chapter" id="mission-label"><span class="chapter__n">I</span>Mission</p>
+        <p class="mission__text" data-ignite>
+          We provide worry-free services so you can focus on your mission. Every contract, every crew, every course is engineered around one promise: <em class="accent">your success is our mission.</em>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ II. CHALLENGE (problems struck through in gold) ============ -->
+    <section class="challenge" aria-labelledby="challenge-title" data-theme="navy">
+      <div class="wrap">
+        <p class="chapter"><span class="chapter__n">II</span>The challenge</p>
+        <h2 class="challenge__title" id="challenge-title" data-strikes>
+          Federal missions can't pause for <span class="strike">staffing gaps</span>, <span class="strike">broken chillers</span> or <span class="strike">untrained teams</span>.
+        </h2>
+        <div class="challenge__answer">
+          <p class="challenge__lead" data-rise-words>CE Solution Plus brings the people, the maintenance and the know&#8209;how together, under <em class="accent">one accountable partner.</em></p>
+          <p class="challenge__body" data-rise>From surge staffing to therapy-pool maintenance to a 300+ course training catalogue, we cover the operational ground between your mandate and its delivery.</p>
         </div>
       </div>
     </section>
 
-    <!-- MANIFESTO -->
-    <section class="manifesto">
-      <div class="label"><span>01</span> Mission</div>
-      <p class="manifesto__text scrub-words">
-        We provide worry-free services so you can focus on your mission. Every contract, every crew, every course — engineered around one promise: <em>your success is our mission.</em>
-      </p>
+    <!-- ============ III. SERVICES (three doors open in 3D) ============ -->
+    <section class="services" id="services" aria-labelledby="services-title" data-theme="light">
+      <div class="services__pin">
+        <div class="wrap services__head">
+          <p class="chapter"><span class="chapter__n">III</span>Services</p>
+          <h2 class="h-display" id="services-title" data-rise-words>Three pillars. <em class="accent">One standard.</em></h2>
+        </div>
+
+        <div class="wrap doors" data-doors>
+          <article class="door" aria-labelledby="svc-1">
+            <div class="door__face">
+              <span class="door__num" aria-hidden="true">01</span>
+              <h3 class="door__title" id="svc-1">Staffing Services</h3>
+              <p class="door__text">Swift, dependable staffing for government agencies. Temporary and surge needs filled with professionals who carry the specialised skills mission-critical roles demand.</p>
+              <ul class="door__list">
+                <li>Temporary &amp; surge staffing</li>
+                <li>Specialised technical talent</li>
+                <li>Client-focused placement process</li>
+              </ul>
+            </div>
+          </article>
+          <article class="door" aria-labelledby="svc-2">
+            <div class="door__face">
+              <span class="door__num" aria-hidden="true">02</span>
+              <h3 class="door__title" id="svc-2">Facility Operations &amp;&nbsp;Maintenance</h3>
+              <p class="door__text">End-to-end facility care: mechanical and electrical repairs, HVAC, security and fire-protection systems, grounds, janitorial and logistical support.</p>
+              <ul class="door__list">
+                <li>Mechanical, electrical &amp; HVAC</li>
+                <li>Security &amp; fire protection</li>
+                <li>Grounds, custodial &amp; logistics</li>
+              </ul>
+            </div>
+          </article>
+          <article class="door" aria-labelledby="svc-3">
+            <div class="door__face">
+              <span class="door__num" aria-hidden="true">03</span>
+              <h3 class="door__title" id="svc-3">Training Services</h3>
+              <p class="door__text">A portfolio of <strong class="door__stat"><span data-count="300">300</span>+</strong> courses across business administration, leadership development, diversity &amp; inclusion and technical skills.</p>
+              <ul class="door__list">
+                <li>In-person &amp; computer-based</li>
+                <li>Webinars &amp; virtual reality</li>
+                <li>Blended learning programmes</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="wrap fit">
+        <p class="eyebrow">Not sure where you fit?</p>
+        <p class="fit__t">Tell us the need. <em class="accent">We'll build the solution.</em></p>
+        <a href="#contact" class="btn btn--ghost" data-magnetic>
+          <span class="btn__fill" aria-hidden="true"></span>
+          <span class="btn__label">Start a conversation</span>
+          <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
     </section>
 
-    <!-- STATEMENT PANEL -->
-    <section class="statement">
-      <div class="statement__panel">
-        <div class="statement__inner">
-          <p class="statement__kicker">The challenge</p>
-          <h2 class="statement__title split-lines">Federal missions can't pause for staffing gaps, broken chillers or untrained teams.</h2>
-          <div class="statement__ring" aria-hidden="true">
-            <svg viewBox="0 0 200 200"><defs><path id="circ" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs><text><textPath href="#circ">ONE PARTNER · EVERY NEED · ONE PARTNER · EVERY NEED · </textPath></text></svg>
-            <span class="statement__plus">+</span>
+    <!-- ============ IV. CAPABILITIES (3D drum) ============ -->
+    <section class="caps" id="capabilities" aria-labelledby="cap-title" data-theme="navy">
+      <div class="caps__pin">
+        <div class="wrap caps__head">
+          <p class="chapter"><span class="chapter__n">IV</span>Field-proven capabilities</p>
+          <h2 class="h-display" id="cap-title" data-rise-words>Thirteen ways we <em class="accent">keep missions running.</em></h2>
+        </div>
+        <div class="drum" data-drum>
+          <div class="drum__window" aria-hidden="true"></div>
+          <ol class="drum__list">
+            <li class="drum__item" data-cat="Facilities">Therapy Pool Maintenance</li>
+            <li class="drum__item" data-cat="Facilities">Snow Removal &amp; De&#8209;icing</li>
+            <li class="drum__item" data-cat="Facilities">Chiller Rental</li>
+            <li class="drum__item" data-cat="Facilities">Custodial &amp; Janitorial</li>
+            <li class="drum__item" data-cat="Facilities">Pest Control</li>
+            <li class="drum__item" data-cat="Facilities">Lab Refrigeration</li>
+            <li class="drum__item" data-cat="Facilities">HVAC Solutions</li>
+            <li class="drum__item" data-cat="Facilities">Fire Protection</li>
+            <li class="drum__item" data-cat="Facilities">Grounds Care</li>
+            <li class="drum__item" data-cat="Staffing">Surge Staffing</li>
+            <li class="drum__item" data-cat="Procurement">Equipment Procurement</li>
+            <li class="drum__item" data-cat="Training">Leadership Training</li>
+            <li class="drum__item" data-cat="Facilities">Logistics Support</li>
+          </ol>
+          <p class="drum__meta" aria-hidden="true"><span class="drum__count"><b data-drum-index>01</b> / 13</span><span class="drum__cat" data-drum-cat>Facilities</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ V. AGENCIES ============ -->
+    <section class="agencies" id="agencies" aria-labelledby="ag-title" data-theme="light">
+      <div class="wrap">
+        <div class="agencies__head">
+          <p class="chapter"><span class="chapter__n">V</span>Trusted by</p>
+          <h2 class="h-display agencies__title" id="ag-title" data-rise-words>Purchase orders and contracts across the <em class="accent">federal landscape.</em></h2>
+          <p class="agencies__count" aria-hidden="true"><span>6</span><small>agencies served</small></p>
+        </div>
+        <ul class="agency-list" data-rows>
+          <li class="agency"><span class="agency__i">01</span><span class="agency__n">Department of Veterans Affairs</span><span class="agency__t">Facilities &amp; equipment</span></li>
+          <li class="agency"><span class="agency__i">02</span><span class="agency__n">National Cemetery Administration</span><span class="agency__t">Grounds &amp; maintenance</span></li>
+          <li class="agency"><span class="agency__i">03</span><span class="agency__n">National Park Service</span><span class="agency__t">Operations support</span></li>
+          <li class="agency"><span class="agency__i">04</span><span class="agency__n">U.S. Army Corps of Engineers</span><span class="agency__t">Technical services</span></li>
+          <li class="agency"><span class="agency__i">05</span><span class="agency__n">Department of the Interior</span><span class="agency__t">Facilities services</span></li>
+          <li class="agency"><span class="agency__i">06</span><span class="agency__n">Department of Defense</span><span class="agency__t">Mission support</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ VI. CREDENTIALS (gold-foil certificate) ============ -->
+    <section class="credentials" id="credentials" aria-labelledby="cred-title" data-theme="navy">
+      <div class="wrap cred">
+        <div class="cred__head">
+          <p class="chapter"><span class="chapter__n">VI</span>Credentials</p>
+          <h2 class="h-display" id="cred-title" data-rise-words>For your <em class="accent">contracting office.</em></h2>
+          <p class="cred__note">Set-aside status and registration codes, ready to paste into your forms.</p>
+          <button type="button" class="btn btn--gold btn--sm" data-copy-all>
+            <span class="btn__fill" aria-hidden="true"></span>
+            <span class="btn__label" data-copy-all-label>Copy all details</span>
+          </button>
+        </div>
+
+        <div class="cert" data-cert>
+          <div class="cert__inner">
+            <span class="cert__sheen" aria-hidden="true"></span>
+            <span class="cert__ribbon" aria-hidden="true"></span>
+            <div class="cert__seal" aria-hidden="true">
+              <svg viewBox="0 0 200 200"><defs><path id="seal-ring" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0"/></defs><text><textPath href="#seal-ring">SERVICE-DISABLED VETERAN-OWNED · WOMAN-OWNED · SMALL BUSINESS · </textPath></text></svg>
+              <span class="cert__mono metal-mask mask-mark"></span>
+            </div>
+            <dl class="spec">
+              <div class="spec__row"><dt>Ownership</dt><dd><span class="spec__v">Service-Disabled Veteran-Owned Small Business</span><span class="tag">SDVOSB</span></dd></div>
+              <div class="spec__row"><dt>Ownership</dt><dd><span class="spec__v">Woman-Owned Small Business</span><span class="tag">WOSB</span></dd></div>
+              <div class="spec__row"><dt>SAM UEI</dt><dd><span class="spec__v spec__v--code">ZVQVJUVMF9K6</span>
+                <button class="copy copy--lg" type="button" data-copy="ZVQVJUVMF9K6" data-copy-label="SAM UEI"><span class="copy__text">Copy</span><span class="sr-only"> SAM UEI</span><svg viewBox="0 0 16 16" aria-hidden="true"><path class="copy__a" d="M5 5V2.5h8.5V11H11M2.5 5H11v8.5H2.5z"/><path class="copy__b" d="M3 8.5l3.2 3L13 4.5"/></svg></button></dd></div>
+              <div class="spec__row"><dt>CAGE code</dt><dd><span class="spec__v spec__v--code">9KV33</span>
+                <button class="copy copy--lg" type="button" data-copy="9KV33" data-copy-label="CAGE code"><span class="copy__text">Copy</span><span class="sr-only"> CAGE code</span><svg viewBox="0 0 16 16" aria-hidden="true"><path class="copy__a" d="M5 5V2.5h8.5V11H11M2.5 5H11v8.5H2.5z"/><path class="copy__b" d="M3 8.5l3.2 3L13 4.5"/></svg></button></dd></div>
+              <div class="spec__row"><dt>Office</dt><dd><span class="spec__v">3007 43rd Street, Suite 1, Astoria, NY 11103</span></dd></div>
+            </dl>
           </div>
         </div>
       </div>
-      <div class="statement__answer">
-        <p class="statement__lead split-lines">CE Solution Plus brings the people, the maintenance and the know-how together — under one accountable partner.</p>
-        <p class="statement__body reveal-up">From surge staffing to therapy-pool maintenance to a 300+ course training catalogue, we cover the operational ground between your mandate and its delivery.</p>
-      </div>
     </section>
 
-    <!-- SERVICES (horizontal) -->
-    <section class="services" id="services">
-      <div class="services__pin">
-        <div class="services__head">
-          <div class="label"><span>02</span> Services</div>
-          <h2 class="services__title">Three pillars.<br/><span class="muted">One standard.</span></h2>
-          <div class="services__progress" aria-hidden="true"><span></span></div>
+    <!-- ============ VII. CONTACT ============ -->
+    <section class="contact" id="contact" aria-labelledby="contact-title" data-theme="light">
+      <div class="contact__mono" aria-hidden="true"><span class="mask-star-outline"></span></div>
+      <div class="wrap contact__inner">
+        <p class="chapter"><span class="chapter__n">VII</span>Have a need?</p>
+        <h2 class="contact__title" id="contact-title" data-chars>
+          <span class="hero__line">Let's build</span>
+          <span class="hero__line">the <em class="accent">solution.</em></span>
+        </h2>
+
+        <div class="contact__row">
+          <a class="seal" href="mailto:siblini@cesolutionplus.com" data-magnetic data-strength="0.35">
+            <svg class="seal__ring" viewBox="0 0 200 200" aria-hidden="true"><defs><path id="seal-ring-2" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs><text><textPath href="#seal-ring-2">YOU HAVE A NEED · WE HAVE A SOLUTION · </textPath></text></svg>
+            <span class="seal__core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18L18 6M9 6h9v9"/></svg></span>
+            <span class="sr-only">Email CE Solution Plus</span>
+          </a>
+
+          <dl class="contact__grid">
+            <div class="contact__mail"><dt>Email</dt><dd><a class="link-line link-line--big" href="mailto:siblini@cesolutionplus.com">siblini@cesolutionplus.com</a></dd></div>
+            <div><dt>Phone</dt><dd><a class="link-line" href="tel:+17185879987">(718) 587-9987</a></dd></div>
+            <div><dt>Office</dt><dd>3007 43rd Street, Suite 1<br />Astoria, NY 11103</dd></div>
+          </dl>
         </div>
-        <div class="services__track">
-
-          <article class="card" data-cursor="Explore">
-            <div class="card__num">01</div>
-            <div class="card__art art-staff" aria-hidden="true">
-              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-            </div>
-            <h3 class="card__title">Staffing<br/>Services</h3>
-            <p class="card__text">Swift, dependable staffing for government agencies — temporary and surge needs filled with professionals who carry the specialised skills mission-critical roles demand.</p>
-            <ul class="card__list">
-              <li>Temporary &amp; surge staffing</li>
-              <li>Specialised technical talent</li>
-              <li>Client-focused placement process</li>
-            </ul>
-          </article>
-
-          <article class="card" data-cursor="Explore">
-            <div class="card__num">02</div>
-            <div class="card__art art-ops" aria-hidden="true">
-              <svg viewBox="0 0 200 200"><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="100" cy="100" r="78"/><circle cx="100" cy="100" r="56" stroke-dasharray="4 6"/><circle cx="100" cy="100" r="34"/><path d="M100 10v30M100 160v30M10 100h30M160 100h30"/><path d="M36 36l20 20M144 144l20 20M164 36l-20 20M56 144l-20 20"/></g></svg>
-            </div>
-            <h3 class="card__title">Facility Operations<br/>&amp; Maintenance</h3>
-            <p class="card__text">End-to-end facility care: mechanical and electrical repairs, HVAC, security and fire-protection systems, grounds, janitorial and logistical support.</p>
-            <ul class="card__list">
-              <li>Mechanical, electrical &amp; HVAC</li>
-              <li>Security &amp; fire protection</li>
-              <li>Grounds, custodial &amp; logistics</li>
-            </ul>
-          </article>
-
-          <article class="card" data-cursor="Explore">
-            <div class="card__num">03</div>
-            <div class="card__art art-train" aria-hidden="true">
-              <span></span><span></span><span></span><span></span><span></span>
-            </div>
-            <h3 class="card__title">Training<br/>Services</h3>
-            <p class="card__text">A portfolio of 300+ courses across business administration, leadership development, diversity &amp; inclusion and technical skills.</p>
-            <ul class="card__list">
-              <li>In-person &amp; computer-based</li>
-              <li>Webinars &amp; virtual reality</li>
-              <li>Blended learning programmes</li>
-            </ul>
-          </article>
-
-          <article class="card card--cta">
-            <p class="card__cta-k">Not sure where you fit?</p>
-            <h3 class="card__title">Tell us the need.<br/>We'll build the solution.</h3>
-            <a href="#contact" class="btn" data-magnetic><span>Start a conversation</span></a>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- NUMBERS -->
-    <section class="numbers">
-      <div class="numbers__grid">
-        <div class="stat"><div class="stat__row"><span class="stat__n" data-count="300">0</span><span class="stat__s">+</span></div><p>Training courses in our catalogue</p></div>
-        <div class="stat"><div class="stat__row"><span class="stat__n" data-count="3">0</span></div><p>Core service lines under one roof</p></div>
-        <div class="stat"><div class="stat__row"><span class="stat__n" data-count="6">0</span><span class="stat__s">+</span></div><p>Federal departments &amp; agencies served</p></div>
-        <div class="stat"><div class="stat__row"><span class="stat__n" data-count="100">0</span><span class="stat__s">%</span></div><p>Veteran &amp; woman owned</p></div>
-      </div>
-    </section>
-
-    <!-- CAPABILITIES MARQUEE -->
-    <section class="capabilities" id="capabilities">
-      <div class="label label--center"><span>03</span> Field-proven capabilities</div>
-      <div class="marquee" data-dir="1">
-        <div class="marquee__inner">
-          <span>Therapy Pool Maintenance</span><b>+</b><span>Snow Removal &amp; De-icing</span><b>+</b><span>Chiller Rental</span><b>+</b><span>Custodial &amp; Janitorial</span><b>+</b>
-        </div>
-      </div>
-      <div class="marquee marquee--outline" data-dir="-1">
-        <div class="marquee__inner">
-          <span>Pest Control</span><b>+</b><span>Lab Refrigeration</span><b>+</b><span>HVAC Solutions</span><b>+</b><span>Fire Protection</span><b>+</b><span>Grounds Care</span><b>+</b>
-        </div>
-      </div>
-      <div class="marquee" data-dir="1">
-        <div class="marquee__inner">
-          <span>Surge Staffing</span><b>+</b><span>Equipment Procurement</span><b>+</b><span>Leadership Training</span><b>+</b><span>Logistics Support</span><b>+</b>
-        </div>
-      </div>
-    </section>
-
-    <!-- AGENCIES -->
-    <section class="agencies" id="agencies">
-      <div class="agencies__head">
-        <div class="label"><span>04</span> Trusted by</div>
-        <h2 class="agencies__title split-lines">Purchase orders and contracts across the federal landscape.</h2>
-      </div>
-      <ul class="agency-list">
-        <li class="agency" data-cursor="Served"><span class="agency__i">01</span><span class="agency__n">Department of Veterans Affairs</span><span class="agency__t">Facilities &amp; equipment</span></li>
-        <li class="agency" data-cursor="Served"><span class="agency__i">02</span><span class="agency__n">National Cemetery Administration</span><span class="agency__t">Grounds &amp; maintenance</span></li>
-        <li class="agency" data-cursor="Served"><span class="agency__i">03</span><span class="agency__n">National Park Service</span><span class="agency__t">Operations support</span></li>
-        <li class="agency" data-cursor="Served"><span class="agency__i">04</span><span class="agency__n">U.S. Army Corps of Engineers</span><span class="agency__t">Technical services</span></li>
-        <li class="agency" data-cursor="Served"><span class="agency__i">05</span><span class="agency__n">Department of the Interior</span><span class="agency__t">Facilities services</span></li>
-        <li class="agency" data-cursor="Served"><span class="agency__i">06</span><span class="agency__n">Department of Defense</span><span class="agency__t">Mission support</span></li>
-      </ul>
-    </section>
-
-    <!-- CREDENTIALS -->
-    <section class="credentials" id="credentials">
-      <div class="label"><span>05</span> Credentials</div>
-      <div class="cred-grid">
-        <div class="cred" data-tilt>
-          <span class="cred__k">Ownership</span>
-          <span class="cred__v">Service-Disabled<br/>Veteran-Owned</span>
-          <span class="cred__tag">SDVOSB</span>
-        </div>
-        <div class="cred" data-tilt>
-          <span class="cred__k">Ownership</span>
-          <span class="cred__v">Woman-Owned<br/>Small Business</span>
-          <span class="cred__tag">WOSB</span>
-        </div>
-        <div class="cred" data-tilt>
-          <span class="cred__k">SAM UEI</span>
-          <span class="cred__v mono">ZVQVJUVMF9K6</span>
-          <button class="cred__copy" data-copy="ZVQVJUVMF9K6">Copy</button>
-        </div>
-        <div class="cred" data-tilt>
-          <span class="cred__k">CAGE Code</span>
-          <span class="cred__v mono">9KV33</span>
-          <button class="cred__copy" data-copy="9KV33">Copy</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="contact" id="contact">
-      <p class="contact__k reveal-fade">Have a need?</p>
-      <h2 class="contact__title">
-        <span class="line"><span class="split">Let's build</span></span>
-        <span class="line line--accent"><span class="split">the solution.</span></span>
-      </h2>
-      <a href="mailto:siblini@cesolutionplus.com" class="contact__orb" data-magnetic data-strength="0.45" aria-label="Email CE Solution Plus">
-        <span>Email us</span>
-      </a>
-      <div class="contact__grid">
-        <div><span class="k">Email</span><a href="mailto:siblini@cesolutionplus.com">siblini@cesolutionplus.com</a></div>
-        <div><span class="k">Phone</span><a href="tel:+17185879987">(718) 587-9987</a></div>
-        <div><span class="k">Office</span><span>3007 43rd Street, Suite 1<br/>Astoria, NY 11103</span></div>
       </div>
     </section>
 
   </main>
 
-  <footer class="footer">
-    <div class="footer__big" aria-hidden="true">CE Solution<span>+</span></div>
-    <div class="footer__row">
-      <span>© <span class="year"></span> CE Solution Plus Corp.</span>
-      <span>Our mission is your success.</span>
-      <a href="#top" class="to-top" data-magnetic>Back to top ↑</a>
+  <footer class="footer" data-theme="navy">
+    <div class="wrap">
+      <div class="footer__logo" aria-hidden="true">
+        <span class="footer__mark metal-mask mask-mark"></span>
+        <span class="footer__lockup">
+          <span class="footer__word metal-mask mask-word"></span>
+          <span class="footer__tag mask-tag"></span>
+        </span>
+      </div>
+      <p class="footer__line">Our mission is <em class="accent">your success.</em></p>
+      <div class="footer__row">
+        <span>© <span data-year>2026</span> CE Solution Plus Corp.</span>
+        <span>UEI ZVQVJUVMF9K6 · CAGE 9KV33</span>
+        <a href="#top" class="link-line">Back to top</a>
+      </div>
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-  <script type="module" src="main.js"></script>
+  <!-- Mobile quick-contact bar -->
+  <div class="dock" data-dock role="region" aria-label="Quick contact">
+    <a href="tel:+17185879987" class="dock__btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h3l1.6 4.3-2 1.4a11 11 0 0 0 5.6 5.6l1.4-2 4.3 1.6v3a2 2 0 0 1-2.1 2A16.5 16.5 0 0 1 4.6 5.6a2 2 0 0 1 2-2.1z"/></svg>Call</a>
+    <a href="mailto:siblini@cesolutionplus.com" class="dock__btn dock__btn--main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5.5h17v13h-17zM3.5 6l8.5 7 8.5-7"/></svg>Email us</a>
+  </div>
+
+  <p class="sr-only" aria-live="polite" data-announcer></p>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="main.js" type="module"></script>
 </body>
 </html>
