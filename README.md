@@ -23,3 +23,8 @@ node serve.mjs   # → http://localhost:5173
 - Content is in the HTML and visible without JavaScript; JS only adds motion.
 - Animate `transform`, `opacity` and `clip-path` only. No perpetual render loops.
 - `prefers-reduced-motion` gets the full content with no pinning, scrubbing or smooth scroll.
+
+## CI and deployment (GitHub Actions)
+- **CI** (`.github/workflows/ci.yml`), on every push and pull request: syntax-checks the scripts, assembles the public site into `_site/` and verifies every local file it references (`node tools/assemble.mjs`), then runs Lighthouse. Accessibility below 95 or layout shift above 0.1 fails the build; performance, best practices and SEO are reported as warnings. Reports are attached to the run as artifacts.
+- **Deploy** (`.github/workflows/deploy.yml`), on every push to `main` or by hand: publishes `_site/` to GitHub Pages.
+  One-time setup: repository **Settings → Pages → Build and deployment → Source: GitHub Actions**.
